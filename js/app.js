@@ -85,9 +85,11 @@
     mobileMenu.innerHTML = links.map(([h, t]) =>
       `<a href="${h}" data-nav="${h}" class="${h === '#' + path ? 'active' : ''}">${t}</a>`).join('') +
       (logged
-        ? `<a href="#/dashboard" data-nav="#/dashboard" class="${path === '/dashboard' ? 'active' : ''}">Dashboard</a>
+        ? `<a href="planos.html">💎 Assinar / Planos</a>
+           <a href="#/dashboard" data-nav="#/dashboard" class="${path === '/dashboard' ? 'active' : ''}">Dashboard</a>
            <a href="#" data-act="logout">👋 ${UI.esc(user.name.split(' ')[0])} — Sair</a>`
-        : `<a href="#/criar-conta" data-nav="#/criar-conta">Criar conta</a>
+        : `<a href="planos.html">💎 Assinar / Planos</a>
+           <a href="#/criar-conta" data-nav="#/criar-conta">Criar conta</a>
            <a href="#/entrar" data-nav="#/entrar">Entrar</a>`);
   }
 
@@ -169,6 +171,7 @@
   let selectedFile = null;
 
   function pageAnalyze() {
+    if (!requireAuth()) return;
     app.innerHTML = `
       <section class="section">
         <div class="container" style="max-width:760px;">
