@@ -6,7 +6,7 @@
 (function (global) {
   'use strict';
 
-  const CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';/+esm
+  const CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
   global.supabaseBoot = (async () => {
     const cfg = (global.APP_CONFIG || {});
