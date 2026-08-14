@@ -80,6 +80,8 @@ input, textarea, select { font-family: inherit; }
 .btn-ghost:hover { background: rgba(255,255,255,.09); color: var(--text); }
 .btn-outline { background: transparent; border-color: var(--border-strong); color: var(--text); }
 .btn-outline:hover { border-color: var(--purple); color: var(--purple); }
+.btn-grad { background: var(--grad); border-color: transparent; color: #fff; box-shadow: 0 10px 30px -10px rgba(139,92,246,.6); }
+.btn-grad:hover { box-shadow: 0 14px 40px -10px rgba(139,92,246,.85); transform: translateY(-2px); }
 .btn-sm { padding: 8px 16px; font-size: 14px; }
 .btn-lg { padding: 15px 30px; font-size: 16px; border-radius: 14px; }
 .btn-lgx { padding: 17px 34px; font-size: 17px; border-radius: 16px; }
