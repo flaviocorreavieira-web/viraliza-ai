@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planos — Viraliza.AI</title>
+  <meta name="description" content="Escolha o plano ideal para potencializar a viralização dos seus vídeos no TikTok, Reels e Shorts." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    body { background: var(--bg); color: var(--text); font-family: var(--font); }
+    .pl-nav { height: var(--nav-h); display: flex; align-items: center; justify-content: space-between;
+              max-width: 1200px; margin: 0 auto; padding: 0 24px; border-bottom: 1px solid var(--border); }
+    .pl-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; text-decoration: none; color: var(--text); }
+    .pl-brand .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--grad); box-shadow: 0 0 12px var(--purple); }
+    .pl-main { max-width: 1000px; margin: 0 auto; padding: 64px 24px 40px; text-align: center; }
+    .pl-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px;
+                background: rgba(139,92,246,.12); border: 1px solid rgba(139,92,246,.3); color: var(--violet);
+                font-size: 13px; font-weight: 600; }
+    .pl-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
+    .pl-main h1 { font-size: clamp(30px, 6vw, 44px); line-height: 1.15; margin: 18px 0 12px; }
+    .pl-main h1 .hl { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .pl-sub { color: var(--text-2); max-width: 620px; margin: 0 auto 44px; font-size: 16px; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; text-align: left; }
+    .plan-card { position: relative; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+                 padding: 30px; display: flex; flex-direction: column; transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
+    .plan-card:hover { transform: translateY(-6px); border-color: var(--border-strong); }
+    .plan-card.featured { border: 1.5px solid var(--purple); box-shadow: var(--shadow); }
+    .plan-card.featured::before { content: 'MAIS POPULAR'; position: absolute; top: -13px; left: 26px; padding: 5px 12px;
+      border-radius: 999px; background: var(--grad); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .04em; }
+    .plan-name { font-size: 18px; font-weight: 700; }
+    .plan-desc { color: var(--text-3); font-size: 14px; margin: 4px 0 18px; }
+    .plan-price { font-size: 40px; font-weight: 800; line-height: 1; }
+    .plan-price small { font-size: 16px; font-weight: 500; color: var(--text-2); }
+    .plan-per { color: var(--text-3); font-size: 13px; margin-top: 6px; }
+    .plan-feats { list-style: none; margin: 22px 0; padding: 0; display: grid; gap: 11px; }
+    .plan-feats li { display: flex; gap: 10px; align-items: flex-start; color: var(--text-2); font-size: 14px; }
+    .plan-feats li .ck { color: var(--green); font-weight: 800; }
+    .plan-feats li.off { opacity: .4; }
+    .plan-cta { margin-top: auto; }
+    .plan-cta .note { font-size: 12px; color: var(--text-3); text-align: center; margin-top: 8px; }
+    .test-note { margin-top: 36px; padding: 14px 18px; border-radius: 14px; background: rgba(251,191,36,.08);
+                 border: 1px solid rgba(251,191,36,.25); color: var(--amber); font-size: 13px; text-align: center; }
+    .pl-foot { text-align: center; color: var(--text-3); font-size: 13px; padding: 30px 24px 40px; }
+    .back { color: var(--text-2); text-decoration: none; font-size: 14px; font-weight: 600; }
+    .back:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+  <nav class="pl-nav">
+    <a class="pl-brand" href="index.html"><span class="dot"></span>Viraliza.AI</a>
+    <a class="back" href="index.html">← Voltar ao início</a>
+  </nav>
+
+  <main class="pl-main">
+    <span class="pl-badge"><span class="dot"></span> Planos e preços</span>
+    <h1>Escolha o plano que <span class="hl">vai viralizar</span> seus vídeos</h1>
+    <p class="pl-sub">Análises de IA para potencializar TikTok, Reels e Shorts. Comece grátis e evolua quando precisar.</p>
+
+    <div class="pricing-grid">
+
+      <!-- FREE -->
+      <div class="plan-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-desc">Para testar o Viraliza.AI</div>
+        <div class="plan-price">R$ 0 <small>/mês</small></div>
+        <div class="plan-per">Sem custo. Sem cartão.</div>
+        <ul class="plan-feats">
+          <li><span class="ck">✓</span> Até 3 análises por mês</li>
+          <li><span class="ck">✓</span> Score de viralização</li>
+          <li><span class="ck">✓</span> Sugestões básicas</li>
+          <li class="off"><span class="ck" style="color:var(--text-3)">✕</span> Análises ilimitadas</li>
+          <li class="off"><span class="ck" style="color:var(--text-3)">✕</span> Recursos avançados</li>
+        </ul>
+        <div class="plan-cta">
+          <a class="btn btn-ghost btn-lg btn-block" href="index.html">Começar grátis</a>
+          <div class="note">Crie sua conta gratuita</div>
+        </div>
+      </div>
+
+      <!-- PRO -->
+      <div class="plan-card featured">
+        <div class="plan-name">Pro</div>
+        <div class="plan-desc">Para criadores que querem crescer</div>
+        <div class="plan-price">R$ 29,90 <small>/mês</small></div>
+        <div class="plan-per">Cancele quando quiser</div>
+        <ul class="plan-feats">
+          <li><span class="ck">✓</span> Análises ilimitadas</li>
+          <li><span class="ck">✓</span> Score + relatório completo</li>
+          <li><span class="ck">✓</span> Sugestões avançadas de conteúdo</li>
+          <li><span class="ck">✓</span> Histórico completo salvo</li>
+          <li><span class="ck">✓</span> Prioridade de suporte</li>
+        </ul>
+        <div class="plan-cta">
+          <a class="btn btn-primary btn-lg btn-block" href="https://buy.stripe.com/test_fZuaEW13N4Vh10N9i24Vy00" target="_blank" rel="noopener">Assinar Pro</a>
+          <div class="note">Pagamento seguro via Stripe (cartão ou Pix)</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="test-note">🔎 Atenção: este link de pagamento está em <strong>modo de teste</strong> do Stripe — permite testar o fluxo, mas não cobra dinheiro real. Para vendas reais, o plano precisa ser ativado no modo ao vivo.</div>
+  </main>
+
+  <footer class="pl-foot">Viraliza.AI © 2026 — Feito para criadores que querem viralizar.</footer>
+</body>
+</html>
