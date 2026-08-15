@@ -131,7 +131,128 @@
     return cap(s) || 'Meu conteúdo';
   }
 
-  function generate(input) {
+  // ------------------------------------------------------------
+  // IA REAL (Gemini) — usada quando AI_ENABLED e AI_API_KEY existem.
+  // Em caso de erro, o app cai no motor simulado (mock) abaixo.
+  // ------------------------------------------------------------
+  function stripJson(text) {
+    const t = String(text || '').trim();
+    const m = t.match(/\{[\s\S]*\}/);
+    return m ? m[0] : t;
+  }
+
+  // Deixa o JSON do modelo tolerante: remove vírgulas sobrando e
+  // converte quebras de linha literais dentro de strings.
+  function lenientParse(json) {
+    try { return JSON.parse(json); } catch (_) {}
+    let out = '', inStr = false;
+    for (let i = 0; i < json.length; i++) {
+      const ch = json[i];
+      if (ch === '"') {
+        let bs = 0, j = i - 1;
+        while (j >= 0 && json[j] === '\\') { bs++; j--; }
+        if (bs % 2 === 0) inStr = !inStr;
+        out += ch;
+      } else if (inStr && ch === '\n') {
+        out += '\\n';
+      } else {
+        out += ch;
+      }
+    }
+    out = out.replace(/,\s*([}\]])/g, '$1');
+    try { return JSON.parse(out); } catch (_) {}
+    return null;
+  }
+
+  async function aiGenerate(input) {
+    const cfg = window.APP_CONFIG || {};
+    const key = cfg.AI_API_KEY;
+    const model = cfg.AI_MODEL || 'gemini-flash-latest';
+    const desc = (input.description || '').trim();
+    const platformName = (input.platformName) || (input.platform || 'tiktok');
+
+    const prompt = `Você é um especialista em conteúdo viral para redes sociais (TikTok, Reels, Shorts).
+Analise a descrição abaixo e responda SOMENTE com JSON válido, sem texto extra, exatamente com estas chaves:
+{
+  "score": <0-100>,
+  "verdict": "<frase curta de avaliação>",
+  "hook": "<gancho forte em PT-BR, máx 14 palavras>",
+  "titles": ["<3 títulos otimizados em PT-BR>"],
+  "caption": "<legenda em PT-BR com CTA e emojis>",
+  "hashtags": ["<5-8 hashtags em PT-BR, sem #>"],
+  "structure": [{"time":"<faixa>","text":"<instrução>"}],
+  "improvements": [{"icon":"<emoji>","text":"<melhoria>"}],
+  "ideas": [{"title":"<título>","desc":"<descrição curta>"}]
+}
+
+Plataforma: ${platformName}.
+Descrição do conteúdo: "${desc.slice(0, 1500)}"`;
+
+    let res = null;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.8, maxOutputTokens: 3000 }
+        })
+      });
+      if (res.ok) break;
+      if (res.status === 503 || res.status === 429) {
+        await new Promise(r => setTimeout(r, 1600));
+        continue;
+      }
+      break;
+    }
+    if (!res.ok) throw new Error('Gemini HTTP ' + res.status);
+    const data = await res.json();
+    const text = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts
+      ? data.candidates[0].content.parts.map(p => p.text || '').join('')
+      : '';
+    if (!text) throw new Error('Gemini sem resposta');
+    const parsed = lenientParse(stripJson(text));
+    if (!parsed) throw new Error('Gemini devolveu JSON inválido');
+
+    const platform = PLATFORMS.find(p => p.id === input.platform) || PLATFORMS[0];
+    const score = Math.max(20, Math.min(99, parseInt(parsed.score, 10) || 60));
+    const titles = Array.isArray(parsed.titles) ? parsed.titles.slice(0, 5) : [];
+    const hashtags = Array.isArray(parsed.hashtags) ? parsed.hashtags.slice(0, 8).map(h => '#' + String(h).replace(/^#/, '')) : [];
+    const structure = Array.isArray(parsed.structure) ? parsed.structure.slice(0, 5) : [];
+    const improvements = Array.isArray(parsed.improvements) ? parsed.improvements.slice(0, 5) : [];
+    const ideas = Array.isArray(parsed.ideas) ? parsed.ideas.slice(0, 5) : [];
+
+    return {
+      score,
+      verdict: parsed.verdict || 'Análise concluída.',
+      platform,
+      subject: slugify(desc),
+      hook: parsed.hook || DEFAULT_HOOK,
+      titles: titles.length ? titles : ['Título otimizado para viralizar'],
+      caption: parsed.caption || '',
+      hashtags: hashtags.length ? hashtags : DEFAULT_TAGS.map(h => '#' + h),
+      structure: structure.length ? structure : [],
+      improvements: improvements.length ? improvements : [],
+      ideas: ideas.length ? ideas : [],
+      date: new Date().toISOString(),
+      ai: true
+    };
+  }
+
+  async function generate(input) {
+    const cfg = window.APP_CONFIG || {};
+    if (cfg.AI_ENABLED && cfg.AI_API_KEY && cfg.AI_API_KEY !== '__GEMINI_KEY__') {
+      try {
+        const r = await aiGenerate(input);
+        return r;
+      } catch (e) {
+        try { console.warn('IA indisponível, usando modo simulado:', e.message); } catch (_) {}
+      }
+    }
+    return mockGenerate(input);
+  }
+
+  function mockGenerate(input) {
     const desc = input.description || '';
     const group = detectGroup(desc) || GROUPS[Math.random() < 0.5 ? 'jogos' : 'receitas'];
     const platform = PLATFORMS.find(p => p.id === input.platform) || PLATFORMS[0];
