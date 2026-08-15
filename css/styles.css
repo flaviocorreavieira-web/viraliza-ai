@@ -120,6 +120,7 @@ input, textarea, select { font-family: inherit; }
 .nav-links a:hover { color: var(--text); background: rgba(255,255,255,.05); }
 .nav-links a.active { color: var(--text); background: rgba(139,92,246,.15); }
 .nav-actions { display: flex; align-items: center; gap: 10px; }
+.nav-user { display: flex; align-items: center; gap: 10px; flex-wrap: nowrap; }
 .avatar {
   width: 38px; height: 38px; border-radius: 50%; background: var(--grad);
   display: grid; place-items: center; font-weight: 700; color: #fff;
@@ -483,6 +484,7 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 700px) {
   .nav-links, .nav-guest { display: none; }
   .menu-toggle { display: flex; }
+  .nav-user .btn { padding: 8px 12px; font-size: 13px; white-space: nowrap; }
   .grid-3 { grid-template-columns: 1fr; }
   .platforms { grid-template-columns: 1fr; }
   .section { padding: 56px 0; }
@@ -492,6 +494,9 @@ input, textarea, select { font-family: inherit; }
   .hist-actions { width: 100%; justify-content: flex-end; }
 }
 @media (max-width: 520px) {
+  .brand-name { display: none; }
+  .nav-actions { gap: 8px; }
+  .nav-user { gap: 8px; }
   .grid-4 { grid-template-columns: 1fr; }
   .steps { grid-template-columns: 1fr; }
   .result-grid { grid-template-columns: 1fr; }
