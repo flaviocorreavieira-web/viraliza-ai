@@ -272,15 +272,20 @@
     });
     document.getElementById('btnAnalyze').addEventListener('click', () => {
       const desc = descEl.value.trim();
-      if (!desc && !selectedFile) { UI.toast('Descreva seu vídeo ou envie um arquivo.', 'error'); return; }
-      const description = desc || `Análise do arquivo ${selectedFile.name} (enviado pelo criador).`;
-      goAnalyze(description, selectedPlatform);
+      if (!desc) {
+        UI.toast('Descreva o que é o seu vídeo para a IA analisar.', 'error');
+        descEl.focus();
+        return;
+      }
+      const description = desc;
+      const platformObj = ViralizaEngine.PLATFORMS.find(p => p.id === selectedPlatform);
+      goAnalyze(description, selectedPlatform, platformObj ? platformObj.name : selectedPlatform);
     });
   }
 
-  function goAnalyze(description, platform) {
+  function goAnalyze(description, platform, platformName) {
     // salva o pedido para a tela de resultado
-    currentRequest = { description, platform };
+    currentRequest = { description, platform, platformName };
     location.hash = '#/result?loading=1';
   }
 
@@ -296,8 +301,8 @@
     if (params.loading === '1') {
       renderLoading();
       const req = currentRequest || { description: 'Conteúdo genérico', platform: 'tiktok' };
-      setTimeout(() => {
-        const an = ViralizaEngine.generate({ description: req.description, platform: req.platform });
+      setTimeout(async () => {
+        const an = await ViralizaEngine.generate({ description: req.description, platform: req.platform, platformName: req.platformName });
         currentAnalysis = an;
         if (Store.isLoggedIn()) Store.addAnalysis(an);
         currentRequest = null;
@@ -395,8 +400,8 @@
     bindCopy();
     document.getElementById('btnRegen').addEventListener('click', () => {
       UI.toast('Gerando uma nova análise...', 'info');
-      setTimeout(() => {
-        const an = ViralizaEngine.generate({ description: a.subject, platform: a.platform.id });
+      setTimeout(async () => {
+        const an = await ViralizaEngine.generate({ description: a.subject, platform: a.platform.id, platformName: a.platform.name });
         currentAnalysis = an;
         if (Store.isLoggedIn()) Store.addAnalysis(an);
         renderResult(an);
